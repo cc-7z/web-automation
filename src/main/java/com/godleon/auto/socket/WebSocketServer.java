@@ -9,13 +9,14 @@ import java.net.Socket;
 
 public class WebSocketServer {
 
-    private static final Logger LOG = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
+    private static final Logger log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
     private ServerSocket serverSocket;
 
     public WebSocketServer() {
         try {
             serverSocket = new ServerSocket(3000);
+            log.info("websocket已开启！");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -27,7 +28,7 @@ public class WebSocketServer {
                     new ServerSocketThread(socket).start();
                 }
             }catch(IOException e){
-                LOG.error("连接异常：", e);
+                log.error("连接异常：", e);
             }
         }).start();
     }

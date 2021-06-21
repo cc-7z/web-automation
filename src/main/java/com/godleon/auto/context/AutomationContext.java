@@ -43,5 +43,5 @@ public abstract class AutomationContext {
         return AutoContainerMain.getProperty(key);
     }
 
-    public abstract void run(String url) throws Exception;
+    public abstract void run(Map<?, ?> arguments) throws Exception;
 }

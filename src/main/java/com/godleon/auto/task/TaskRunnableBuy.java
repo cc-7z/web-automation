@@ -48,7 +48,7 @@ public class TaskRunnableBuy implements Runnable {
 
             context.setDriver(AutoContainerMain.getWebDriver());
             context.setTlid(task.getTlid());
-            context.run("https://www.baidu.com");
+            context.run(AutoContainerMain.json2Obj(task.getArguments(), Map.class));
 
         } catch (Exception e) {
             log.error("执行脚本出现异常，信息： ", e);

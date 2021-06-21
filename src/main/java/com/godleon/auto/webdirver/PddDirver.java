@@ -14,9 +14,11 @@ public class PddDirver extends AutomationContext {
 
 
     @Override
-    public void run(String url) throws Exception {
-        String url1 = String.valueOf(url);
+    public void run(Map<?,?> arguments) throws Exception {
+        String url1 = String.valueOf(arguments.get("url"));
+        System.out.println(url1);
         webdriver.open(url1);
+        webdriver.findElementByHtml("女装").click();
         Thread.sleep(5000);
     }
 }
