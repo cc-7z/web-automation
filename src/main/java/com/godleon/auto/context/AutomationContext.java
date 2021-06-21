@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * abstract class
  * @author leon
- * @date  2021-06-21
+ * @version 1.0.0
  */
 public abstract class AutomationContext {
     /**
@@ -43,5 +43,5 @@ public abstract class AutomationContext {
         return AutoContainerMain.getProperty(key);
     }
 
-    public abstract void run(Map<?, ?> arguments) throws Exception;
+    public abstract void run(String url) throws Exception;
 }

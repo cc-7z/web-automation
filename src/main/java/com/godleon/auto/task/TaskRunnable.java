@@ -12,15 +12,12 @@ import java.io.IOException;
 
 /**
  * Task realization
- *
  * @author leon
+ * @version 1.0.0
  */
 public class TaskRunnable implements Runnable {
 
     private static final Logger log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
-
-    @Value("${browserPath}")
-    private String browserPath;
 
     private Task task;
 
@@ -30,7 +27,6 @@ public class TaskRunnable implements Runnable {
 
     @Override
     public void run() {
-        // 类型为0，则启动浏览器
         if (task.getMethodType() == 0) {
             try {
                 startBrowser();
@@ -42,10 +38,11 @@ public class TaskRunnable implements Runnable {
     }
 
     private void startBrowser(){
+
         new Thread(() -> {
             try {
                 // --kiosk
-                Process ps = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --start-maximized --new-window https://www.baidu.com");
+                Process ps = Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --start-maximized --new-window http://mobile.pinduoduo.com/login.html");
                 ps.waitFor();
             } catch (IOException ex) {
                 log.error("启动牛奶器异常，信息： ", ex);

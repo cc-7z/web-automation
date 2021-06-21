@@ -6,6 +6,7 @@ import java.util.Date;
 /**
  * task entity
  * @author leon
+ * @version 1.0.0
  */
 public class Task {
 
