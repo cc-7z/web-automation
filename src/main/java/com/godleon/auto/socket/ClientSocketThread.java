@@ -9,12 +9,22 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * ClientSocketThread
+ * @author leon
+ * @version 1.0.0
+ */
 public class ClientSocketThread extends Thread{
 
     private static final Logger LOG = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
-    // 与服务器保持长连接的socket实例
+
+    /**
+     * 与服务器保持长连接的socket实例
+     */
     private Socket socket;
-    // 是否自动重连
+    /**
+     * 是否自动重连
+     */
     private boolean reconnect = Boolean.parseBoolean(AutoContainerMain.getProperty("autoReconnection"));
 
     private volatile boolean keepPing = true;
@@ -24,9 +34,11 @@ public class ClientSocketThread extends Thread{
     public boolean setSocket(int count){
         int time = 0;
         if(count > 0){
-            if(count < 10){ // 断线重连，小于10次，间隔为10秒
+            //断线重连，小于10次，间隔为10秒
+            if(count < 10){
                 time = 10000;
-            }else{	// 10次后，重连的间隔时间为30秒
+                //10次后，重连的间隔时间为30秒
+            }else{
                 time = 30000;
             }
             try {
@@ -40,21 +52,28 @@ public class ClientSocketThread extends Thread{
         return this.socket != null;
 
     }
-    // 连接服务器
+
+    /**
+     * 连接服务器
+     */
     public void initSocket(){
         try {
             socket = new Socket(AutoContainerMain.getProperty("serviceAddress"), Integer.parseInt(AutoContainerMain.getProperty("servicePort")));
             sendMessageToServer(AutoContainerMain.getProperty("deviceName"));
-
             LOG.info("与服务器建立连接成功！");
         } catch (IOException e1) {
             LOG.info("与服务端建立socket连接异常。");
         }
     }
-    // 持续接收服务器推送的消息
+
+    /**
+     * 持续接收服务器推送的消息
+     */
+    @Override
     public void run(){
         setSocket(0);
-        new Thread(() -> {//启一个线程，每5秒ping一次服务器
+        //启一个线程，每5秒ping一次服务器
+        new Thread(() -> {
             while(keepPing){
                 try {
                     Thread.sleep(5000);
@@ -91,10 +110,13 @@ public class ClientSocketThread extends Thread{
         this.closeSocket();
         this.socket = null;
         int count = 0;
-        while(!setSocket(count++));//重连
+        //重连
+        while(!setSocket(count++)){};
     }
 
-    // 关闭连接
+    /**
+     * 关闭连接
+     */
     public void closeSocket() {
         if(socket != null){
             try {
@@ -104,7 +126,11 @@ public class ClientSocketThread extends Thread{
             }
         }
     }
-    // 发送消息给服务器
+
+    /**
+     * 发送消息给服务器
+     * @param content
+     */
     public void sendMessageToServer(String content) {
         while(true){
             try {
@@ -113,7 +139,6 @@ public class ClientSocketThread extends Thread{
                 out.writeInt(contentBytes.length);
                 out.write(contentBytes);
                 out.flush();
-                //LOG.debug("发送消息：" + content);
                 return;
             } catch (IOException e) {
                 LOG.error("发送消息给服务器异常：", e);

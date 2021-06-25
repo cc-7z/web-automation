@@ -18,7 +18,8 @@ public class PddDirver extends AutomationContext {
         String url1 = String.valueOf(arguments.get("url"));
         System.out.println(url1);
         webdriver.open(url1);
-        webdriver.findElementByHtml("女装").click();
+//        webdriver.findElementById("kw").sendKeys("Java");
+//        webdriver.findElementById("su").click();
         Thread.sleep(5000);
     }
 }

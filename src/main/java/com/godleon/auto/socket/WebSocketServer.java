@@ -15,7 +15,7 @@ public class WebSocketServer {
 
     public WebSocketServer() {
         try {
-            serverSocket = new ServerSocket(3000);
+            serverSocket = new ServerSocket(5000);
             log.info("websocket已开启！");
         } catch (IOException e1) {
             e1.printStackTrace();

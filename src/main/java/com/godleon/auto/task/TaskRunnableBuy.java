@@ -4,15 +4,10 @@ package com.godleon.auto.task;
 import com.godleon.auto.container.AutoContainerMain;
 import com.godleon.auto.context.AutomationContext;
 import com.godleon.auto.entity.Task;
-import com.godleon.auto.webdirver.PddDirver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.awt.*;
 import java.awt.event.InputEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -53,44 +48,28 @@ public class TaskRunnableBuy implements Runnable {
         } catch (Exception e) {
             log.error("执行脚本出现异常，信息： ", e);
         } finally {
-            // 关闭浏览器
-//            if (task.getMethodType() == 0) {
-//                closeBrowser();
-//            }
+             //关闭浏览器
+            if (task.getMethodType() == 0) {
+                closeBrowser();
+            }
         }
 
 
     }
-
-    private void startBrowser(){
-        new Thread(() -> {
-            try {
-                // --kiosk
-                Process ps = Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --start-maximized --new-window http://mobile.pinduoduo.com/login.html");
-                ps.waitFor();
-            } catch (IOException ex) {
-                log.error("启动牛奶器异常，信息： ", ex);
-            } catch (InterruptedException ex) {
-                log.error("启动牛奶器异常，信息： ", ex);
-            }
-        }).start();
+    private void closeBrowser(){
+        try {
+            String res = AutoContainerMain.sendMessageToBrowser("{\"t\":1,\"n\":\"rt\",\"a\":[]}");
+            Map<Object, Object> response = AutoContainerMain.mapper.readValue(res, Map.class);
+            int left = (int) response.get("l");
+            int top = (int) response.get("t");
+            Robot r = AutoContainerMain.getRobot();
+            r.mouseMove(left-15, top+10);
+            r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            r.delay(50);
+            r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            r.delay(200);
+        } catch (Exception e) {
+            log.error("关闭牛奶器异常，信息： ", e);
+        }
     }
-
-
-//    private void closeBrowser(){
-//        try {
-//            String res = AutoContainerMain.sendMessageToBrowser("{\"t\":1,\"n\":\"rt\",\"a\":[]}");
-//            Map<Object, Object> response = AutoContainerMain.mapper.readValue(res, Map.class);
-//            int left = (int) response.get("l");
-//            int top = (int) response.get("t");
-//            Robot r = AutoContainerMain.getRobot();
-//            r.mouseMove(left-15, top+10);
-//            r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-//            r.delay(50);
-//            r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-//            r.delay(200);
-//        } catch (Exception e) {
-//            log.error("关闭牛奶器异常，信息： ", e);
-//        }
-//    }
 }

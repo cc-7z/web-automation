@@ -34,6 +34,7 @@ public class ServerSocketThread extends Thread{
         this.socket = socket;
     }
 
+    @Override
     public void run(){
         try {
             InputStream in = socket.getInputStream();
@@ -42,9 +43,9 @@ public class ServerSocketThread extends Thread{
             int count = -1;
             String req = "";
             count = in.read(buff);
+
             req = new String(buff, 0, count);
             String secKey = getSecWebSocketKey(req);
-
             String response="HTTP/1.1 101 Switching Protocols\r\n"
                     + "Upgrade: websocket\r\n"
                     + "Connection: Upgrade\r\n"
@@ -53,6 +54,7 @@ public class ServerSocketThread extends Thread{
             AutoContainerMain.setServerSocketThread(this);
 
             while(true){
+                //TODO 应该这里有问题
                 count = in.read(buff);
                 for(int i=0; i<count-6; i++){
                     buff[i+6] = (byte) (buff[i%4+2]^buff[i+6]);
@@ -73,7 +75,12 @@ public class ServerSocketThread extends Thread{
             LOG.info("webSocket通过异常关闭。");
         }
     }
-    // 发送消息给浏览器
+
+    /**
+     * 发送消息给牛奶器
+     * @param content
+     * @return
+     */
     public String sendMessageToClient(String content) {
         resContent = "";
         try {

@@ -1,13 +1,8 @@
 package com.godleon.auto.task;
 
-
-import com.godleon.auto.container.AutoContainerMain;
 import com.godleon.auto.entity.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-
 import java.io.IOException;
 
 /**
@@ -42,7 +37,7 @@ public class TaskRunnable implements Runnable {
         new Thread(() -> {
             try {
                 // --kiosk
-                Process ps = Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe --start-maximized --new-window http://mobile.pinduoduo.com/login.html");
+                Process ps = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --start-maximized --new-window http://mobile.pinduoduo.com/login.html");
                 ps.waitFor();
             } catch (IOException ex) {
                 log.error("启动牛奶器异常，信息： ", ex);
